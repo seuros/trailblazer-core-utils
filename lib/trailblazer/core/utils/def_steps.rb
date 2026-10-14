@@ -23,8 +23,8 @@ module Trailblazer
       #
       # @example
       #   task task: T.def_task(:create)
-      def self.def_task(name)
-        def_tasks(name).method(name)
+      def self.def_task(name, **options)
+        def_tasks(name, **options).method(name)
       end
 
       def self.def_tasks(*names, success_signal: Activity::Right)

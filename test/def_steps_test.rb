@@ -1,6 +1,17 @@
 require "test_helper"
 
 class DefStepsTest < Minitest::Spec
+  it "{#def_task}" do
+    task = Trailblazer::Core.def_task(:a, success_signal: Object)
+
+    lib_ctx, flow_options, signal, *remaining = task.(options = {target_ctx: {seq: []}}, {}, nil, **options)
+
+    assert_equal lib_ctx, {target_ctx: {seq: [:a]}}
+    assert_equal flow_options, {}
+    assert_equal signal, Object
+    assert_equal remaining, []
+  end
+
   it "{#def_tasks}" do
     my_right  = Class.new
     tasks     = Trailblazer::Core.def_tasks(:a, :b, success_signal: my_right)

@@ -14,6 +14,7 @@ module Trailblazer
       extend Forwardable
       def_delegator Utils::DefSteps, :def_steps
       def_delegator Utils::DefSteps, :def_tasks
+      def_delegator Utils::DefSteps, :def_task
     end
   end
 end
