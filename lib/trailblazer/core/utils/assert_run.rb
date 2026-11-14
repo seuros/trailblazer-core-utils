@@ -15,7 +15,7 @@ module Trailblazer
 
         # TODO: use the public Invoke.call API! will save us some lines of code above.
         # lib_ctx, flow_options, signal = Activity::Invoke.invoke_runner(lib_ctx, flow_options, signal, **circuit_options)
-        lib_ctx, flow_options, signal = runner.(lib_ctx, flow_options, signal, **circuit_options)
+        lib_ctx, flow_options, signal = runner.(lib_ctx, flow_options, signal, canonical_node, nil, circuit_options)
 
         if terminus.is_a?(Symbol)
           terminus = circuit.to_h[:outputs].fetch(terminus).signal
