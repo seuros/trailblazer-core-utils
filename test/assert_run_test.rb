@@ -113,6 +113,7 @@ Expected: [:a, :b]
   end
 
   it "accepts {node: true}" do
+    raise "node: my_node"
     my_node = Trailblazer::Circuit::Node::MergeToCircuitOptions[:a, Trailblazer::Circuit::Task::Adapter::LibInterface::InstanceMethod, merge_to_circuit_options: {exec_context: MyExecContext}]
 
     lib_ctx, flow_options, signal = assert_run my_node, seq: [:a],
@@ -138,5 +139,25 @@ Expected: [:a, :b]
 
     lib_ctx, flow_options = assert_run my_pipe, seq: [:a],
       circuit_options: {exec_context: my_exec_context, runner: Trailblazer::Circuit::Node::Runner}
+  end
+
+  it "raises with non-matching {:expected_target_variables}" do
+    _test = Class.new(MySpec) do
+      it do
+        my_pipe = Trailblazer::Circuit::Builder.Pipeline(
+          [:a, my_exec_context.method(:a)],
+        )
+
+        lib_ctx, flow_options = assert_run my_pipe, seq: [:a],
+          expected_target_variables: {seq: [:a, :b]}
+      end
+    end
+
+    assert_test_case_fails _test, error_message: "Expected: [:a, :b]
+  Actual: [:a]"
+  end
+
+  it "accepts {:expected_target_variables}" do
+    assert_run my_pipe, seq: [:a], expected_target_variables: {seq: [:a]}
   end
 end
