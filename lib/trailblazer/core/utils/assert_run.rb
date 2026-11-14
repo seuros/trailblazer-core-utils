@@ -2,9 +2,9 @@ module Trailblazer
   module Core::Utils
     module AssertRun
       # DISCUSS: use Invoke.call() here?
-      def assert_run(circuit, node: false, terminus: nil, seq: nil, flow_options: {}, signal: nil, circuit_options: {runner: Trailblazer::Circuit::Node::Runner}, target_ctx: {seq: []}, expected_target_variables: {}, **lib_ctx)
+      def assert_run(circuit = nil, node: nil, terminus: nil, seq: nil, flow_options: {}, signal: nil, circuit_options: {runner: Trailblazer::Circuit::Node::Runner}, target_ctx: {seq: []}, expected_target_variables: {}, **lib_ctx)
         # If circuit isn't a Node instance already, wrap it in a "canonical node".
-        canonical_node = node ? circuit : Trailblazer::Circuit::Node[circuit, Trailblazer::Circuit::Processor] # TODO: remove :node and figure it out automatically.
+        canonical_node = node ? node : Trailblazer::Circuit::Node[circuit, Trailblazer::Circuit::Processor] # TODO: remove :node and figure it out automatically.
 
         # circuit_options = {runner: runner}.merge(circuit_options)
         runner = circuit_options.fetch(:runner)

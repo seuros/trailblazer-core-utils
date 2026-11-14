@@ -112,12 +112,10 @@ Expected: [:a, :b]
     assert_nil signal
   end
 
-  it "accepts {node: true}" do
-    raise "node: my_node"
+  it "accepts {node: my_node}" do
     my_node = Trailblazer::Circuit::Node::MergeToCircuitOptions[:a, Trailblazer::Circuit::Task::Adapter::LibInterface::InstanceMethod, merge_to_circuit_options: {exec_context: MyExecContext}]
 
-    lib_ctx, flow_options, signal = assert_run my_node, seq: [:a],
-      node: true
+    lib_ctx, flow_options, signal = assert_run node: my_node, seq: [:a]
   end
 
   it "accepts {:target_ctx}" do
