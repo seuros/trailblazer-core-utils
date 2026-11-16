@@ -62,4 +62,29 @@ class DefStepsTest < Minitest::Spec
 
     assert_equal Trailblazer::Core::Utils.inspect(ctx), %({:seq=>[:a, :b]})
   end
+
+  it "#def_steps doesn't mutate the {seq} array" do
+    my_exec_context = Trailblazer::Core.def_steps(:a)
+    seq    = []
+    my_ctx = {seq: seq}
+
+    my_exec_context.method(:a).(my_ctx, **my_ctx)
+
+    assert_equal my_ctx, {seq: [:a]}
+    assert_equal seq, [] # seq hasn't changed
+  end
+
+  it "#def_tasks doesn't mutate the {seq} array" do
+    my_exec_context = Trailblazer::Core.def_tasks(:a)
+    seq    = []
+    my_ctx = {seq: seq}
+    lib_ctx = {target_ctx: my_ctx}
+
+    new_lib_ctx, _ = my_exec_context.method(:a).(lib_ctx, {}, nil, **lib_ctx)
+
+    assert_equal new_lib_ctx, {target_ctx: {seq: [:a]}}
+    assert_equal seq, [] # nothing has changed
+    assert_equal my_ctx, {seq: []}
+    assert_equal lib_ctx, {target_ctx: {seq: []}}
+  end
 end
